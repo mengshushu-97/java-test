@@ -1,0 +1,22 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: ${SERVICE_NAME:java-test}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+app:
+  service-name: ${SERVICE_NAME:java-test}
+  env: ${APP_ENV:local}
+  scheduling-enabled: ${SCHEDULING_ENABLED:true}
+  node-service-url: ${NODE_SERVICE_URL:http://localhost:3000}
+  agent-service-url: ${AGENT_SERVICE_URL:http://localhost:8000}
+  request-timeout-ms: ${REQUEST_TIMEOUT_MS:5000}
+  heartbeat-rate-ms: ${HEARTBEAT_RATE_MS:1000}
+  chain-rate-ms: ${CHAIN_RATE_MS:60000}
