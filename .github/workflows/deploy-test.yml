@@ -43,13 +43,28 @@ jobs:
 
       - name: Test
         run: |
-          mkdir -p /tmp/m2-java-test
+          MAVEN_CACHE_DIR="$HOME/.cache/maven/java-test"
+          mkdir -p "$MAVEN_CACHE_DIR"
+          cat > "$MAVEN_CACHE_DIR/settings.xml" <<'EOF'
+          <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0">
+            <mirrors>
+              <mirror>
+                <id>aliyunmaven</id>
+                <mirrorOf>*</mirrorOf>
+                <name>Aliyun Maven</name>
+                <url>https://maven.aliyun.com/repository/public</url>
+              </mirror>
+            </mirrors>
+          </settings>
+          EOF
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
             -v "${{ github.workspace }}:/workspace" \
-            -v /tmp/m2-java-test:/root/.m2 \
+            -v "$MAVEN_CACHE_DIR:/tmp/.m2" \
             -w /workspace \
+            -e HOME=/tmp \
             maven:3.9-eclipse-temurin-17 \
-            mvn test
+            sh -lc 'mvn -s /tmp/.m2/settings.xml -Dmaven.repo.local=/tmp/.m2/repository test'
 
       - name: Build and push Harbor image
         run: ./scripts/build-push-harbor.sh
