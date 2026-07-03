@@ -27,7 +27,7 @@ spec:
         - name: harbor-auth
       containers:
         - name: java-test
-          image: harbor.local/test/java-test:bootstrap
+          image: harbor.local/test/java-test:c01e7d2fb4a663cf6edf64dfa0330a2dedd5e77c
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
